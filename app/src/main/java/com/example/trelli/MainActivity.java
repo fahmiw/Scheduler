@@ -28,8 +28,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Kalender
-
+        // Implementasi RecyclerView
         addData();
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         adapter = new TaskAdapter(taskArrayList);
@@ -50,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         taskArrayList.add(new Task("PR MATEMATIKA", "20-10-2020", "Harus selesai Sekarang" ));
 
     }
+
+    // Pindah Activity ke form Task
 
     public void onClick(View v) {
         Intent i = new Intent(MainActivity.this, NewTaskActivity.class);

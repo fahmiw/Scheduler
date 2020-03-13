@@ -16,7 +16,7 @@ public class NewTaskActivity extends AppCompatActivity {
         super.onCreate(savedIntanceState);
         setContentView(R.layout.addnewtask_activity);
 
-        // Kalender
+        // Kalender Picker
         final TextView selectDate = findViewById(R.id.text_date);
         Calendar calendar = Calendar.getInstance();
         final int year = calendar.get(Calendar.YEAR);
