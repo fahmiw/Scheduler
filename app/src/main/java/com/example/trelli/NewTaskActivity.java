@@ -1,22 +1,31 @@
 package com.example.trelli;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Calendar;
 
-public class NewTaskActivity extends AppCompatActivity {
+public class NewTaskActivity extends Activity {
     protected void onCreate(Bundle savedIntanceState){
         super.onCreate(savedIntanceState);
         setContentView(R.layout.addnewtask_activity);
 
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+
+        getWindow().setLayout((int) (width*.8), (int) (height*.6));
+
         // Kalender Picker
+
         final TextView selectDate = findViewById(R.id.text_date);
         Calendar calendar = Calendar.getInstance();
         final int year = calendar.get(Calendar.YEAR);
