@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Trelli</string>
-    <string name="task_date" />
-    <string name="task_description" />
-    <string name="task_priority" />
+    <string name="task_date">due date</string>
+    <string name="task_description">Desksipsi</string>
+    <string name="demo_task">Make a working demo</string>
 </resources>

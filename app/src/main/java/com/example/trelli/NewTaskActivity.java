@@ -48,5 +48,9 @@ public class NewTaskActivity extends Activity {
         });
 
     }
+    private void saveTask(){
+        // Menambah Sebuah Task
+
+    }
 
 }
