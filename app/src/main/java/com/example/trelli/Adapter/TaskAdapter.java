@@ -1,52 +1,73 @@
 package com.example.trelli.Adapter;
 
-//import android.support.v7.widget.RecyclerView;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.trelli.R;
+
 import com.example.trelli.Model.Task;
+import com.example.trelli.R;
 
-import  java.util.ArrayList;
+import java.util.ArrayList;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
+/**
+ * Created by delaroy on 1/5/18.
+ */
 
-    private ArrayList<Task> dataList;
-
-    public TaskAdapter(ArrayList<Task> dataList){
-        this.dataList=dataList;
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
+    private ArrayList<Task> listTask;
+    private Context context;
+    public TaskAdapter(ArrayList<Task> list, Context ctx){
+        this.listTask = list;
+        this.context = ctx;
+    }
+    @NonNull
+    @Override
+    public TaskHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        return new TaskHolder(view);
     }
 
     @Override
-    public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.list_item, parent, false);
-        return new TaskViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(TaskViewHolder holder, int position) {
-        holder.txtJudul.setText(dataList.get(position).getJudul());
-        holder.txtTgl.setText( dataList.get(position).getTgl());
-    }
-
+    public void onBindViewHolder(@NonNull TaskHolder holder, int position) {
+        final Task task = listTask.get(position);
+        holder.cardView.setBackgroundColor(Color.rgb(255, 255, 255));
+        holder.JudulTask.setText(task.getJudulTask());
+        holder.tanggalTask.setText(task.getTanggal());
+        holder.bulanTask.setText(task.getBulan());
+        holder.tahunTask.setText(task.getTahun());
+        holder.catatanTask.setText(task.getCatatanTask());
+}
     @Override
     public int getItemCount() {
-        return (dataList != null) ? dataList.size() : 0;
+        return listTask.size();
     }
 
-    public class TaskViewHolder extends RecyclerView.ViewHolder{
-        private TextView txtJudul, txtTgl, txtCatatan;
-
-        public TaskViewHolder(View itemView) {
+    public class TaskHolder extends RecyclerView.ViewHolder {
+        TextView JudulTask, tanggalTask, bulanTask, tahunTask,catatanTask;
+        CardView cardView;
+        public TaskHolder(@NonNull View itemView) {
             super(itemView);
-            txtJudul = (TextView) itemView.findViewById(R.id.txt_judul);
-            txtTgl = (TextView) itemView.findViewById(R.id.txt_tgl);
-            txtCatatan = (TextView) itemView.findViewById(R.id.txt_catatan);
+            cardView    = itemView.findViewById(R.id.card);
+            JudulTask   = itemView.findViewById(R.id.txt_judul);
+            catatanTask = itemView.findViewById(R.id.txt_catatan);
+            tanggalTask = itemView.findViewById(R.id.txt_tgl);
+            bulanTask   = itemView.findViewById(R.id.txt_bln);
+            tahunTask   = itemView.findViewById(R.id.txt_thn);
         }
     }
 }

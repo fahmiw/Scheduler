@@ -1,46 +1,66 @@
 package com.example.trelli.Model;
 
-import android.database.Cursor;
-
-import static com.example.trelli.Model.TaskContract.getColumnInt;
-import static com.example.trelli.Model.TaskContract.getColumnLong;
-import static com.example.trelli.Model.TaskContract.getColumnString;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Task{
-    public static final long NO_DATE = Long.MAX_VALUE;
-    public static final long NO_ID = -1;
+    private String id;
+    private String judulTask;
+    private String tanggalTask;
+    private String catatanTask;
+    private Date tempDate;
 
-    public long id;
-    public final String judul;
-    public final String catatan;
-    public final boolean isComplete;
-    public final long dueDate;
-
-
-    public Task(String judul, String catatan, long dueDate, boolean isComplete) {
-        this.id = NO_ID;
-        this.judul = judul;
-        this.catatan = catatan;
-        this.dueDate = dueDate;
-        this.isComplete = isComplete;
+    public Task(String pJudulTask, String pTanggalTask, String pCatatanTask) throws ParseException{
+        this.judulTask      = pJudulTask;
+        this.tanggalTask    = pTanggalTask;
+        this.catatanTask    = pCatatanTask;
+        this.tempDate       = new SimpleDateFormat("dd-MMM-yy").parse(this.tanggalTask);
     }
 
-    public Task(String judul, String catatan, boolean isComplete){
-        this(judul, catatan, NO_DATE, isComplete);
+    public Task(String pId, String pJudulTask, String pTanggalTask, String pCatatanTask) throws ParseException{
+        this.id             = pId;
+        this.judulTask      = pJudulTask;
+        this.tanggalTask    = pTanggalTask;
+        this.catatanTask    = pCatatanTask;
+        this.tempDate       = new SimpleDateFormat("dd-MMM-yyyy").parse(this.tanggalTask);
     }
 
-    public Task(Cursor cursor){
-        this.id = getColumnLong(cursor, TaskContract.TaskColumns._ID);
-        this.judul = getColumnString(cursor, TaskContract.TaskColumns.JUDUL);
-        this.catatan = getColumnString(cursor, TaskContract.TaskColumns.CATATAN);
-        this.dueDate = getColumnLong(cursor, TaskContract.TaskColumns.DUE_DATE);
-        this.isComplete = getColumnInt(cursor, TaskContract.TaskColumns.IS_COMPLETE) == 1;
+    public String getId(){
+        return id;
     }
 
-    /**
-     * Return true if a due date has been set on this task.
-     */
-    public boolean hasDueDate(){
-        return this.dueDate != Long.MAX_VALUE;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getJudulTask(){
+        return judulTask;
+    }
+
+    public void setJudulTask(String judulTask) {
+        this.judulTask = judulTask;
+    }
+    public String getTanggalTask(){
+        return tanggalTask;
+    }
+
+    public void setTempDate(String tempDate) throws ParseException {
+        this.tanggalTask = tanggalTask;
+        this.tempDate = new SimpleDateFormat("dd-MMM-yyyy").parse(this.tanggalTask);
+    }
+    public String getCatatanTask(){
+        return catatanTask;
+    }
+    public String getTanggal(){
+        return String.format("%td",this.tempDate);
+    }
+
+    public String getBulan(){
+        return String.format("%tb",this.tempDate).toUpperCase();
+    }
+
+    public String getTahun(){
+        return String.format("%tY",this.tempDate);
     }
 }

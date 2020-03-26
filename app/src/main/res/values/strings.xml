@@ -3,4 +3,8 @@
     <string name="task_date">due date</string>
     <string name="task_description">Desksipsi</string>
     <string name="demo_task">Make a working demo</string>
+    <string name="date_empty">Not Set</string>
+    <string name="task_completed_failed">\"Failed\"</string>
+    <string name="task_completed">Complete</string>
+    <string name="action_save">SAVE</string>
 </resources>
