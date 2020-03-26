@@ -1,24 +1,31 @@
 package com.example.trelli;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.Toast;
 
 import com.example.trelli.Adapter.TaskAdapter;
 import com.example.trelli.Helper.DbAdapter;
 import com.example.trelli.Model.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -28,21 +35,22 @@ public class MainActivity extends AppCompatActivity{
     FloatingActionButton addButton;
     private ArrayList<Task> list = new ArrayList<>();
     private RecyclerView recyclerView;
-    private TaskAdapter adapter;
+    TaskAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         selectAllTaskFromDatabase();
-        db.open();
-        Cursor c = db.getAllTask();
-        if(c.moveToFirst()){
-            do{
-                DisplayDb(c);
-            } while (c.moveToNext());
-        }
-        db.close();
+
+//        db.open();
+//        Cursor c = db.getAllTask();
+//        if(c.moveToFirst()){
+//            do{
+//                DisplayDb(c);
+//            } while (c.moveToNext());
+//        }
+//        db.close();
 
         //Adapter
         adapter = new TaskAdapter(list, this);
@@ -52,7 +60,7 @@ public class MainActivity extends AppCompatActivity{
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-
+        deleteTask();
         setupAddButton();
     }
 
@@ -81,25 +89,30 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case REQUEST_CODE_ADD:
                 if (resultCode == Activity.RESULT_OK) {
+                    assert data !=null;
                     Bundle bundle = data.getExtras();
+                    assert bundle !=null;
                     String judulTask = bundle.getString("judulTask");
                     String tanggalTask = bundle.getString("tanggalTask");
                     String catatanTask = bundle.getString("catatanTask");
-                    Task pTask = null;
+                    Date aDateTask = null;
                     try {
-                        pTask = new Task(judulTask, tanggalTask, catatanTask);
+                        assert tanggalTask != null;
+                        aDateTask = new SimpleDateFormat("dd-MMM-yyyy").parse(tanggalTask);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    // Coba ke DB.
+                    Task pTask = new Task(judulTask, aDateTask, catatanTask);
+                    // Insert
                     insertTaskToDatabase(pTask);
-                    selectAllTaskFromDatabase();
+                    list.add(pTask);
                     adapter.notifyDataSetChanged();
                     Toast.makeText(this, "Data berhasil disimpan.", Toast.LENGTH_LONG).show();
                 } else {
@@ -111,7 +124,9 @@ public class MainActivity extends AppCompatActivity{
     // Insert data Task ke dalam Database.
     private void insertTaskToDatabase(Task pTask){
         db.open();
-        long id = db.insertTask(pTask.getJudulTask(), pTask.getTanggal(), pTask.getCatatanTask());
+        String dateTask;
+        dateTask = pTask.getDateTask();
+        db.insertTask(pTask.getJudulTask(), dateTask, pTask.getCatatanTask());
         db.close();
     }
 
@@ -122,7 +137,9 @@ public class MainActivity extends AppCompatActivity{
         if(c.moveToFirst()){
             do {
                 try {
-                    list.add(new Task(c.getString(0),c.getString(1),c.getString(2),c.getString(3)));
+                    String date = c.getString(2);
+                    @SuppressLint("SimpleDateFormat") Date aDate = new SimpleDateFormat("dd-MMM-yyyy").parse(date);
+                    list.add(new Task(c.getLong(0),c.getString(1), aDate, c.getString(3)));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -130,11 +147,57 @@ public class MainActivity extends AppCompatActivity{
         }
         db.close();
     }
-    public void DisplayDb(Cursor c){
-        Toast.makeText(this,"id: " + c.getString(0) + "\n" +
-                                            "Judul: " + c.getString(1) + "\n" +
-                                            "Tanggal: " + c.getString(2) + "\n" +
-                                            "Catatan: " + c.getString(3) + "\n", Toast.LENGTH_LONG).show();
+
+    // Delete
+    private void deleteTask(){
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                final int position = viewHolder.getAdapterPosition();
+                final String mJudulTask = list.get(position).getJudulTask();
+                final String mTanggalTask = list.get(position).getDateTask();
+                final String mCatatanTask = list.get(position).getCatatanTask();
+
+                db.open();
+                db.deleteContact(list.get(position).getId());
+                db.close();
+
+
+                list.remove(position);
+                Toast.makeText(MainActivity.this, "Item Removed" + position, Toast.LENGTH_SHORT).show();
+                adapter.notifyItemRemoved(position);
+
+
+                Snackbar.make(recyclerView, mJudulTask, Snackbar.LENGTH_LONG)
+                        .setAction("Undo", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Task aTask = null;
+                                try {
+                                    String date = mTanggalTask;
+                                    Date aDate = new SimpleDateFormat("dd-MMM-yyyy").parse(date);
+                                    aTask = new Task(mJudulTask, aDate, mCatatanTask);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+                                db.open();
+                                db.insertTask(String.valueOf(position), mJudulTask, mTanggalTask, mCatatanTask);
+                                db.close();
+
+                                list.add(position, aTask);
+                                adapter.notifyItemInserted(position);
+                            }
+                        }).show();
+            }
+        }).attachToRecyclerView(recyclerView);
+
+
     }
 
 }

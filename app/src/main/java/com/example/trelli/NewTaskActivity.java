@@ -80,7 +80,7 @@ public class NewTaskActivity extends AppCompatActivity {
                     Toast.makeText(NewTaskActivity.this, "Data task kurang lengkap.", Toast.LENGTH_SHORT).show();
                 } else {
                     Bundle bundle = new Bundle();
-                    bundle.putString("namaTask", sJudulTask);
+                    bundle.putString("judulTask", sJudulTask);
                     bundle.putString("tanggalTask", sTanggalTask);
                     bundle.putString("catatanTask", sCatatanTask);
                     Intent moveIntent = new Intent();

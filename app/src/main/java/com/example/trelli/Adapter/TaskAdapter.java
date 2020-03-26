@@ -47,7 +47,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
         final Task task = listTask.get(position);
         holder.cardView.setBackgroundColor(Color.rgb(255, 255, 255));
         holder.JudulTask.setText(task.getJudulTask());
-        holder.tanggalTask.setText(task.getTanggal());
+        holder.tanggalTask.setText(task.getTgl());
         holder.bulanTask.setText(task.getBulan());
         holder.tahunTask.setText(task.getTahun());
         holder.catatanTask.setText(task.getCatatanTask());
