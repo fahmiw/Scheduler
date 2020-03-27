@@ -1,4 +1,4 @@
-package com.example.trelli;
+package com.example.trelli.Model;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,8 +19,7 @@ import android.widget.Toast;
 
 import com.example.trelli.Adapter.TaskAdapter;
 import com.example.trelli.Helper.DbAdapter;
-import com.example.trelli.Model.SwipeController;
-import com.example.trelli.Model.Task;
+import com.example.trelli.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 

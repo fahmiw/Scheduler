@@ -1,4 +1,4 @@
-package com.example.trelli;
+package com.example.trelli.Model;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.trelli.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

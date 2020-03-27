@@ -7,22 +7,8 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_bg"
     card_view:cardUseCompatPadding="true"
-    tools:context=".NewTaskActivity">
+    tools:context=".Model.NewTaskActivity">
 
-<!--        <TextView-->
-<!--            android:id="@+id/newTask"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentTop="true"-->
-<!--            android:text="BUAT TASK BARU"-->
-<!--            android:textSize="30dp"-->
-<!--            android:textAlignment="center"-->
-<!--            android:paddingTop="25dp"-->
-<!--            android:paddingBottom="25dp"-->
-<!--            android:fontFamily="sans-serif-smallcaps"-->
-<!--            android:background="#00223e"-->
-<!--            android:textColor="#FFA17F"-->
-<!--            />-->
 
         <EditText
                 android:id="@+id/text_input_judul"

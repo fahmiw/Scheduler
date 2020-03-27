@@ -2,7 +2,9 @@ package com.example.trelli.Adapter;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.trelli.Model.DetailTask;
 import com.example.trelli.Model.Task;
 import com.example.trelli.R;
 
@@ -37,7 +40,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TaskHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TaskHolder holder, final int position) {
         final Task task = listTask.get(position);
         holder.cardView.setBackgroundColor(Color.rgb(255, 255, 255));
         holder.JudulTask.setText(task.getJudulTask());
@@ -45,6 +48,20 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
         holder.bulanTask.setText(task.getBulan());
         holder.tahunTask.setText(task.getTahun());
         holder.catatanTask.setText(task.getCatatanTask());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Pass data
+                Bundle bundle = new Bundle();
+                bundle.putLong("id", getItemId(position));
+                bundle.putString("judulTask", task.getJudulTask());
+                bundle.putString("tanggalTask", task.getTgl() + "-" + task.getBulan() + "-" + task.getTahun());
+                bundle.putString("catatanTask", task.getCatatanTask());
+                Intent intent = new Intent(v.getContext(), DetailTask.class);
+                intent.putExtras(bundle);
+                v.getContext().startActivity(intent);
+            }
+        });
 }
     @Override
     public int getItemCount() {

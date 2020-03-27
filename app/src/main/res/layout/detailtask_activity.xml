@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_bg"
+    card_view:cardCornerRadius="90dp"
+    tools:context=".Model.DetailTask">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/clock"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="20dp"
+                card_view:srcCompat="@android:drawable/ic_lock_idle_alarm">
+
+            </ImageView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/detail_judul"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/clock"
+                android:textAlignment="center"
+                android:text="Ini judul"
+                android:textSize="50dp"
+                android:textAllCaps="true"
+                android:textColor="#FFF">
+            </TextView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/detail_tanggal"
+                android:layout_below="@+id/detail_judul"
+                android:text="Ini Tanggal"
+                android:textAlignment="center"
+                android:textSize="30dp"
+                android:textColor="#FFF">
+
+            </TextView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/detail_catatan"
+                android:layout_below="@id/detail_tanggal"
+                android:text="Ini Catatan"
+                android:textSize="25dp"
+                android:textAlignment="center"
+                android:textColor="#FFF">
+            </TextView>
+        </RelativeLayout>
+</RelativeLayout>
