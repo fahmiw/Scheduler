@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -32,13 +33,13 @@ public class NewTaskActivity extends AppCompatActivity {
         setDateButton();
         saveTask();
 
-//        DisplayMetrics dm = new DisplayMetrics();
-//        getWindowManager().getDefaultDisplay().getMetrics(dm);
-//
-//        // Pop up Task
-//        int width = dm.widthPixels;
-//        int height = dm.heightPixels;
-//        getWindow().setLayout((int) (width*.8), (int) (height*.6));
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        // Pop up Task
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        getWindow().setLayout((int) (width*.8), (int) (height*.6));
 
     }
 

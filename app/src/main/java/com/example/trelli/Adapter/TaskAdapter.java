@@ -2,16 +2,10 @@ package com.example.trelli.Adapter;
 
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -69,6 +63,19 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
             bulanTask   = itemView.findViewById(R.id.txt_bln);
             tahunTask   = itemView.findViewById(R.id.txt_thn);
         }
+    }
+    public void removeItem(int position) {
+        listTask.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(Task item, int position) {
+
+        listTask.add(position, item);
+        notifyItemInserted(position);
+    }
+    public ArrayList<Task> getData() {
+        return listTask;
     }
 }
 

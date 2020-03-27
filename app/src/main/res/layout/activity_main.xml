@@ -5,6 +5,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_bg"
     tools:context=".MainActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -18,14 +19,14 @@
         android:layout_marginEnd="33dp"
         android:layout_marginBottom="31dp"
         android:clickable="true"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+        app:srcCompat="@android:drawable/ic_input_add" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:paddingTop="8dp"
-        android:clipToPadding="false"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="8dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 

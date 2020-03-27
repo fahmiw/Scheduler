@@ -3,6 +3,7 @@ package com.example.trelli;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,13 +12,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.Toast;
 
 import com.example.trelli.Adapter.TaskAdapter;
 import com.example.trelli.Helper.DbAdapter;
+import com.example.trelli.Model.SwipeController;
 import com.example.trelli.Model.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity{
     private ArrayList<Task> list = new ArrayList<>();
     private RecyclerView recyclerView;
     TaskAdapter adapter;
+    CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,24 +46,19 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         selectAllTaskFromDatabase();
 
-//        db.open();
-//        Cursor c = db.getAllTask();
-//        if(c.moveToFirst()){
-//            do{
-//                DisplayDb(c);
-//            } while (c.moveToNext());
-//        }
-//        db.close();
-
         //Adapter
         adapter = new TaskAdapter(list, this);
+
         // Implementasi RecyclerView
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
+        //DeleteTask
         deleteTask();
+
+        // Menambah Task
         setupAddButton();
     }
 
@@ -114,9 +112,9 @@ public class MainActivity extends AppCompatActivity{
                     insertTaskToDatabase(pTask);
                     list.add(pTask);
                     adapter.notifyDataSetChanged();
-                    Toast.makeText(this, "Data berhasil disimpan.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Task berhasil Disimpan", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(this, "Tambah Task dibatalkan.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Menambah Task Dibatalkan", Toast.LENGTH_LONG).show();
                 }
         }
     }
@@ -148,16 +146,13 @@ public class MainActivity extends AppCompatActivity{
         db.close();
     }
 
-    // Delete
+    // Delete Task Dari Database
     private void deleteTask(){
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        SwipeController swipeController = new SwipeController(this){
             @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
                 final int position = viewHolder.getAdapterPosition();
                 final String mJudulTask = list.get(position).getJudulTask();
                 final String mTanggalTask = list.get(position).getDateTask();
@@ -166,38 +161,38 @@ public class MainActivity extends AppCompatActivity{
                 db.open();
                 db.deleteContact(list.get(position).getId());
                 db.close();
+                adapter.removeItem(position);
+
+                Snackbar snackbar = Snackbar.make(recyclerView, "Task Telah dihapus", Snackbar.LENGTH_LONG);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Task aTask = null;
+                        try {
+                            String date = mTanggalTask;
+                            Date aDate = new SimpleDateFormat("dd-MMM-yyyy").parse(date);
+                            aTask = new Task(mJudulTask, aDate, mCatatanTask);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        db.open();
+                        db.insertTask(String.valueOf(position), mJudulTask, mTanggalTask, mCatatanTask);
+                        db.close();
+
+                        list.add(position, aTask);
+                        adapter.notifyItemInserted(position);
+                    }
+                });
+
+                snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
 
 
-                list.remove(position);
-                Toast.makeText(MainActivity.this, "Item Removed" + position, Toast.LENGTH_SHORT).show();
-                adapter.notifyItemRemoved(position);
-
-
-                Snackbar.make(recyclerView, mJudulTask, Snackbar.LENGTH_LONG)
-                        .setAction("Undo", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Task aTask = null;
-                                try {
-                                    String date = mTanggalTask;
-                                    Date aDate = new SimpleDateFormat("dd-MMM-yyyy").parse(date);
-                                    aTask = new Task(mJudulTask, aDate, mCatatanTask);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-
-                                db.open();
-                                db.insertTask(String.valueOf(position), mJudulTask, mTanggalTask, mCatatanTask);
-                                db.close();
-
-                                list.add(position, aTask);
-                                adapter.notifyItemInserted(position);
-                            }
-                        }).show();
             }
-        }).attachToRecyclerView(recyclerView);
-
-
+        };
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
     }
 
 }
