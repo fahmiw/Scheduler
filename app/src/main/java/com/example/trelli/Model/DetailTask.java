@@ -4,16 +4,14 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.trelli.Helper.DbAdapter;
+import com.example.trelli.Adapter.TaskRepository;
 import com.example.trelli.R;
 
 public class DetailTask extends AppCompatActivity {
-    DbAdapter db = new DbAdapter(this);
+    TaskRepository db = new TaskRepository(this);
     TextView vJudulTask, vTanggalTask, vCatatanTask;
 
     @Override

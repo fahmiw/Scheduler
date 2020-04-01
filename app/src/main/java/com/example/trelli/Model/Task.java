@@ -1,57 +1,71 @@
 package com.example.trelli.Model;
 
-import android.annotation.SuppressLint;
 
-import java.util.Date;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-public class Task{
-    private long id;
+@Entity(tableName = "table_task")
+public
+class Task {
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "idTask")
+    private long rowId;
+    @ColumnInfo(name = "judulTask")
     private String judulTask;
-    private Date dateTask;
+    @ColumnInfo(name = "tanggalTask")
+    private String tanggalTask;
+    @ColumnInfo(name = "catatanTask")
     private String catatanTask;
 
+    // Constructor.
+    public Task() {
 
-    public Task(String pJudulTask, Date pDateTask, String pCatatanTask){
-        this.judulTask      = pJudulTask;
-        this.dateTask       = pDateTask;
-        this.catatanTask    = pCatatanTask;
     }
 
-    public Task(long pId, String pJudulTask, Date pDateTask, String pCatatanTask){
-        this.id             = pId;
-        this.judulTask      = pJudulTask;
-        this.dateTask    = pDateTask;
-        this.catatanTask    = pCatatanTask;
+    // Setter
+    public void setTanggalTask(String tanggalTask){
+        this.tanggalTask = tanggalTask;
     }
 
-    public long getId() {
-        return id;
+    public void setRowId(long rowId) {
+        this.rowId = rowId;
     }
 
+    public void setJudulTask(String judulTask){
+        this.judulTask = judulTask;
+    }
 
-    public String getJudulTask(){
+    public void setCatatanTask(String catatanTask) {
+        this.catatanTask = catatanTask;
+    }
+
+    // Getter.
+    public String getTanggalTask() {
+        return getTanggalTask();
+    }
+
+    long getRowId() {
+        return rowId;
+    }
+
+    String getJudulTask() {
         return judulTask;
     }
 
-    @SuppressLint("DefaultLocale")
-    public String getDateTask() {
-        return String.format("%td-%tb-%tY", this.dateTask, this.dateTask, this.dateTask);
-    }
-
-    public String getCatatanTask() {
+    String getCatatanTask() {
         return catatanTask;
     }
 
-    @SuppressLint("DefaultLocale")
-    public String getTgl(){
-        return String.format("%td",this.dateTask);
+    String getTanggal() {
+        return tanggalTask.substring(0, 2);
     }
 
-    public String getBulan(){
-        return String.format("%tb",this.dateTask).toUpperCase();
+    String getBulan() {
+        return tanggalTask.substring(3, 6);
     }
 
-    public String getTahun(){
-        return String.format("%tY",this.dateTask);
+    String getTahun() {
+        return tanggalTask.substring(7);
     }
 }

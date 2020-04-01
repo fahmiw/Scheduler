@@ -17,8 +17,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.trelli.Adapter.TaskAdapter;
-import com.example.trelli.Helper.DbAdapter;
+import com.example.trelli.Helper.TaskRoomDatabase;
+import com.example.trelli.Adapter.TaskRepository;
 import com.example.trelli.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -32,11 +32,11 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity{
 
     public static final int REQUEST_CODE_ADD = 1;
-    DbAdapter db = new DbAdapter(this);
+    TaskRepository db = new TaskRepository(this);
     FloatingActionButton addButton;
     private ArrayList<Task> list = new ArrayList<>();
     private RecyclerView recyclerView;
-    TaskAdapter adapter;
+    TaskRoomDatabase adapter;
     CoordinatorLayout coordinatorLayout;
 
     @Override
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity{
         selectAllTaskFromDatabase();
 
         //Adapter
-        adapter = new TaskAdapter(list, this);
+        adapter = new TaskRoomDatabase(list, this);
 
         // Implementasi RecyclerView
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
