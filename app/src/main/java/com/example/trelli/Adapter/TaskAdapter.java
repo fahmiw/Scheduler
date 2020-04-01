@@ -19,19 +19,21 @@ import com.example.trelli.Model.DetailTask;
 import com.example.trelli.Model.Task;
 import com.example.trelli.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Created by delaroy on 1/5/18.
- */
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
-    private ArrayList<Task> listTask;
-    private Context context;
-    public TaskAdapter(ArrayList<Task> list, Context ctx){
+    private List<Task> listTask;
+    private LayoutInflater layoutInflater;
+
+    public void setListTask(List<Task> list){
         this.listTask = list;
-        this.context = ctx;
+        notifyDataSetChanged();
     }
+    public TaskAdapter(Context context){
+        layoutInflater = LayoutInflater.from(context);
+    }
+
     @NonNull
     @Override
     public TaskHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -44,23 +46,20 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
         final Task task = listTask.get(position);
         holder.cardView.setBackgroundColor(Color.rgb(255, 255, 255));
         holder.JudulTask.setText(task.getJudulTask());
-        holder.tanggalTask.setText(task.getTgl());
+        holder.tanggalTask.setText(task.getTanggal());
         holder.bulanTask.setText(task.getBulan());
         holder.tahunTask.setText(task.getTahun());
         holder.catatanTask.setText(task.getCatatanTask());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Pass data
-                Bundle bundle = new Bundle();
-                bundle.putLong("id", getItemId(position));
-                bundle.putString("judulTask", task.getJudulTask());
-                bundle.putString("tanggalTask", task.getTgl() + "-" + task.getBulan() + "-" + task.getTahun());
-                bundle.putString("catatanTask", task.getCatatanTask());
-                Intent intent = new Intent(v.getContext(), DetailTask.class);
-                intent.putExtras(bundle);
-                v.getContext().startActivity(intent);
-            }
+        holder.itemView.setOnClickListener(v -> {
+            // Pass data
+            Bundle bundle = new Bundle();
+            bundle.putLong("id", getItemId(position));
+            bundle.putString("judulTask", task.getJudulTask());
+            bundle.putString("tanggalTask", task.getTanggal() + "-" + task.getBulan() + "-" + task.getTahun());
+            bundle.putString("catatanTask", task.getCatatanTask());
+            Intent intent = new Intent(v.getContext(), DetailTask.class);
+            intent.putExtras(bundle);
+            v.getContext().startActivity(intent);
         });
 }
     @Override
@@ -68,10 +67,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
         return listTask.size();
     }
 
-    public class TaskHolder extends RecyclerView.ViewHolder {
+    class TaskHolder extends RecyclerView.ViewHolder {
         TextView JudulTask, tanggalTask, bulanTask, tahunTask,catatanTask;
         CardView cardView;
-        public TaskHolder(@NonNull View itemView) {
+        TaskHolder(@NonNull View itemView) {
             super(itemView);
             cardView    = itemView.findViewById(R.id.card);
             JudulTask   = itemView.findViewById(R.id.txt_judul);
@@ -86,13 +85,5 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
         notifyItemRemoved(position);
     }
 
-    public void restoreItem(Task item, int position) {
-
-        listTask.add(position, item);
-        notifyItemInserted(position);
-    }
-    public ArrayList<Task> getData() {
-        return listTask;
-    }
 }
 
