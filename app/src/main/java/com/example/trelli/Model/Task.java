@@ -14,18 +14,14 @@ class Task {
     @ColumnInfo(name = "judulTask")
     private String judulTask;
     @ColumnInfo(name = "tanggalTask")
-    private String tanggalTask;
+    private String dateTask;
     @ColumnInfo(name = "catatanTask")
     private String catatanTask;
 
-    // Constructor.
-    public Task() {
+    public Task() { }
 
-    }
-
-    // Setter
-    public void setTanggalTask(String tanggalTask){
-        this.tanggalTask = tanggalTask;
+    public void setDateTask(String tanggalTask){
+        this.dateTask = tanggalTask;
     }
 
     public void setRowId(long rowId) {
@@ -40,32 +36,31 @@ class Task {
         this.catatanTask = catatanTask;
     }
 
-    // Getter.
-    public String getTanggalTask() {
-        return getTanggalTask();
+    public String getDateTask() {
+        return dateTask;
     }
 
-    long getRowId() {
+    public long getRowId() {
         return rowId;
     }
 
-    String getJudulTask() {
+    public String getJudulTask() {
         return judulTask;
     }
 
-    String getCatatanTask() {
+    public String getCatatanTask() {
         return catatanTask;
     }
 
-    String getTanggal() {
-        return tanggalTask.substring(0, 2);
+    public String getTanggal() {
+        return dateTask.substring(0, 2);
     }
 
-    String getBulan() {
-        return tanggalTask.substring(3, 6);
+    public String getBulan() {
+        return dateTask.substring(3, 6);
     }
 
-    String getTahun() {
-        return tanggalTask.substring(7);
+    public String getTahun() {
+        return dateTask.substring(7);
     }
 }

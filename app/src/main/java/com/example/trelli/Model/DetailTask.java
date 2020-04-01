@@ -6,12 +6,14 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.trelli.Adapter.TaskRepository;
+import com.example.trelli.Helper.TaskViewModel;
 import com.example.trelli.R;
 
 public class DetailTask extends AppCompatActivity {
-    TaskRepository db = new TaskRepository(this);
+    private TaskViewModel taskViewModel;
     TextView vJudulTask, vTanggalTask, vCatatanTask;
 
     @Override
@@ -25,11 +27,13 @@ public class DetailTask extends AppCompatActivity {
         vTanggalTask = findViewById(R.id.detail_tanggal);
         vCatatanTask = findViewById(R.id.detail_catatan);
 
-        db.open();
+        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+
+        assert bundle != null;
             vJudulTask.setText(bundle.getString("judulTask"));
             vTanggalTask.setText(bundle.getString("tanggalTask"));
             vCatatanTask.setText(bundle.getString("catatanTask"));
-        db.close();
+
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
@@ -38,6 +42,4 @@ public class DetailTask extends AppCompatActivity {
         int height = dm.heightPixels;
         getWindow().setLayout((int) (width*.8), (int) (height*.6));
     }
-
-
 }

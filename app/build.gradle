@@ -8,7 +8,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
-        versionName "1.1"
+        versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -21,16 +21,11 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
-    allprojects {
-        repositories {
-            google()
-            jcenter()
-        }
-    }
 }
 
 dependencies {
     def room_version = "2.2.3"
+    def lifecycle_version = "2.2.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -52,6 +47,16 @@ dependencies {
     implementation 'com.android.support:preference-v7:25.3.1'
 
     // Room components
+    //noinspection GradleDependency
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    // Lifecycle components
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    //noinspection LifecycleAnnotationProcessorWithJava8
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+
+    // Testing
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+
 }
